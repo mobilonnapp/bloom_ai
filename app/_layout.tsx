@@ -3,18 +3,35 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../constants/colors';
 import SplashOverlay from '../components/SplashOverlay';
+import TutorialOverlay from '../components/TutorialOverlay';
 
 SplashScreen.preventAutoHideAsync();
 
+const TUTORIAL_KEY = '@bloom:tutorial_seen';
+
 export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(true);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
     // Hide the native splash immediately — our custom overlay takes over
     SplashScreen.hideAsync();
   }, []);
+
+  // After splash ends: check if this is first launch
+  const handleSplashDone = async () => {
+    setShowSplash(false);
+    const seen = await AsyncStorage.getItem(TUTORIAL_KEY);
+    if (!seen) setShowTutorial(true);
+  };
+
+  const handleTutorialDone = async () => {
+    await AsyncStorage.setItem(TUTORIAL_KEY, '1');
+    setShowTutorial(false);
+  };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -38,9 +55,18 @@ export default function RootLayout() {
           name="upgrade"
           options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
         />
+        <Stack.Screen
+          name="settings"
+          options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen name="about" />
+        <Stack.Screen name="privacy" />
+        <Stack.Screen name="terms" />
       </Stack>
 
-      {showSplash && <SplashOverlay onDone={() => setShowSplash(false)} />}
+      {/* Tutorial renders under splash so it's revealed when splash fades out */}
+      {showTutorial && <TutorialOverlay onDone={handleTutorialDone} />}
+      {showSplash && <SplashOverlay onDone={handleSplashDone} />}
     </GestureHandlerRootView>
   );
 }
