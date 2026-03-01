@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "Bloom AI Maker",
+    "slug": "bloom-ai-maker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "bloom",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#070C18"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.bloomai.maker",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "We need access to your photos to select face images for AI video generation.",
+        "NSCameraUsageDescription": "We need camera access to take face photos for video generation.",
+        "NSPhotoLibraryAddUsageDescription": "We need permission to save your AI-generated videos to your gallery."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#070C18"
+      },
+      "package": "com.bloomai.maker",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.INTERNET"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Bloom AI Maker to access your photos to create amazing AI videos.",
+          "cameraPermission": "Allow Bloom AI Maker to take photos for AI video generation."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow Bloom AI Maker to save your AI-generated videos.",
+          "savePhotosPermission": "Allow Bloom AI Maker to save videos to your gallery.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      "expo-av"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
