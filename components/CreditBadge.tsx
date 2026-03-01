@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../constants/colors';
 
@@ -8,6 +8,7 @@ interface CreditBadgeProps {
   style?: ViewStyle;
   size?: 'sm' | 'md' | 'lg';
   showIcon?: boolean;
+  onPress?: () => void;
 }
 
 const sizeMap = {
@@ -21,17 +22,12 @@ export default function CreditBadge({
   style,
   size = 'md',
   showIcon = true,
+  onPress,
 }: CreditBadgeProps) {
   const sz = sizeMap[size];
 
-  return (
-    <View
-      style={[
-        styles.container,
-        { paddingHorizontal: sz.paddingH, paddingVertical: sz.paddingV },
-        style,
-      ]}
-    >
+  const inner = (
+    <>
       {showIcon && (
         <Ionicons
           name="diamond"
@@ -43,6 +39,34 @@ export default function CreditBadge({
       <Text style={[styles.text, { fontSize: sz.fontSize }]}>
         {amount.toLocaleString()}
       </Text>
+    </>
+  );
+
+  if (onPress) {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.75}
+        style={[
+          styles.container,
+          { paddingHorizontal: sz.paddingH, paddingVertical: sz.paddingV },
+          style,
+        ]}
+      >
+        {inner}
+      </TouchableOpacity>
+    );
+  }
+
+  return (
+    <View
+      style={[
+        styles.container,
+        { paddingHorizontal: sz.paddingH, paddingVertical: sz.paddingV },
+        style,
+      ]}
+    >
+      {inner}
     </View>
   );
 }

@@ -64,7 +64,7 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.headerRight}>
-            <CreditBadge amount={credits.balance} size="sm" />
+            <CreditBadge amount={credits.balance} size="sm" onPress={() => router.push('/upgrade')} />
             <TouchableOpacity
               onPress={() => router.push('/upgrade')}
               style={styles.headerBtn}
