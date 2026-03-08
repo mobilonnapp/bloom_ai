@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,18 @@ export default function HomeScreen() {
   const { credits } = useCredits();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [isScreenFocused, setIsScreenFocused] = useState(true);
+  const promoFiredRef = useRef(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (promoFiredRef.current) return;
+      promoFiredRef.current = true;
+      const timer = setTimeout(() => {
+        router.push('/upgrade');
+      }, 1500);
+      return () => clearTimeout(timer);
+    }, [])
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -66,7 +78,7 @@ export default function HomeScreen() {
           <View style={styles.headerRight}>
             <CreditBadge amount={credits.balance} size="sm" onPress={() => router.push('/upgrade')} />
             <TouchableOpacity
-              onPress={() => router.push('/upgrade')}
+              onPress={() => router.push('/settings' as any)}
               style={styles.headerBtn}
               activeOpacity={0.7}
             >
@@ -109,8 +121,9 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
       >
-        {TEMPLATE_CATEGORIES.filter((cat) => !activeCategory || cat === activeCategory).map(
-          (cat) => (
+        {TEMPLATE_CATEGORIES
+          .filter((cat) => !activeCategory || cat === activeCategory)
+          .map((cat) => (
             <CategorySection
               key={cat}
               title={cat}
@@ -118,10 +131,8 @@ export default function HomeScreen() {
               onTemplatePress={handleTemplatePress}
               shouldPlayVideos={isScreenFocused}
             />
-          )
-        )}
+          ))}
 
-        {/* Bottom padding for tab bar */}
         <View style={{ height: 20 }} />
       </ScrollView>
     </View>

@@ -48,7 +48,7 @@ export default function PrivacyScreen() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} activeOpacity={0.75}>
             <Ionicons name="chevron-back" size={22} color={CYAN} />
           </TouchableOpacity>
-          <Text style={styles.title}>Gizlilik Politikası</Text>
+          <Text style={styles.title}>Privacy Policy</Text>
           <View style={{ width: 38 }} />
         </View>
 
@@ -59,51 +59,51 @@ export default function PrivacyScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.card}>
-            <PolicySection number="1" title="Veri Toplama">
+            <PolicySection number="1" title="Data Collection">
               <Text style={styles.bodyText}>
-                Uygulamamızı kullandığınızda, size en iyi video oluşturma deneyimini sunmak için belirli
-                bilgileri topluyoruz. Bu bilgiler şunları içerebilir:
+                When you use our app, we collect certain information to provide you with the best
+                video creation experience. This may include:
               </Text>
               <View style={styles.bulletList}>
-                <BulletItem text="Yüklediğiniz medya dosyaları ve görseller." />
-                <BulletItem text="Cihaz bilgileri ve işletim sistemi sürümü." />
-                <BulletItem text="AI modellerini iyileştirmek için anonimleştirilmiş kullanım verileri." />
+                <BulletItem text="Media files and images you upload." />
+                <BulletItem text="Device information and operating system version." />
+                <BulletItem text="Anonymized usage data to improve our AI models." />
               </View>
             </PolicySection>
 
             <View style={styles.sectionDivider} />
 
-            <PolicySection number="2" title="Veri Kullanımı">
+            <PolicySection number="2" title="Data Usage">
               <Text style={styles.bodyText}>
-                Topladığımız veriler, yapay zeka işlem süreçlerimizi optimize etmek ve size özel içerikler
-                üretmek amacıyla kullanılır. Kişisel verileriniz asla üçüncü taraf reklam verenlerle
-                paylaşılmaz.
+                The data we collect is used to optimize our AI processing pipelines and generate
+                personalized content for you. Your personal data is never shared with third-party
+                advertisers.
               </Text>
               <Text style={[styles.bodyText, { marginTop: 8 }]}>
-                Video işleme süreçleri tamamlandıktan sonra, bulut sunucularımızdaki geçici veriler
-                periyodik olarak temizlenir.
+                After video processing is complete, temporary data on our cloud servers is
+                periodically purged.
               </Text>
             </PolicySection>
 
             <View style={styles.sectionDivider} />
 
-            <PolicySection number="3" title="Güvenlik">
+            <PolicySection number="3" title="Security">
               <Text style={styles.bodyText}>
-                Verilerinizin güvenliği bizim için en öncelikli konudur. Endüstri standardı şifreleme
-                yöntemlerini (AES-256) kullanıyoruz. Siber saldırılara ve yetkisiz erişimlere karşı
-                sürekli izlenen bir altyapı sunuyoruz.
+                The security of your data is our top priority. We use industry-standard encryption
+                (AES-256) and maintain a continuously monitored infrastructure against cyber attacks
+                and unauthorized access.
               </Text>
               <Text style={[styles.bodyText, { marginTop: 8 }]}>
-                Hesabınızın güvenliği için iki aşamalı doğrulamayı aktif etmenizi öneririz.
+                We recommend enabling two-factor authentication to keep your account secure.
               </Text>
             </PolicySection>
 
             <View style={styles.sectionDivider} />
 
-            <PolicySection number="4" title="Haklarınız">
+            <PolicySection number="4" title="Your Rights">
               <Text style={styles.bodyText}>
-                KVKK kapsamında, verilerinizin silinmesini talep etme veya hangi verilerin işlendiğini
-                öğrenme hakkına sahipsiniz. Destek merkezimiz üzerinden bizimle iletişime geçebilirsiniz.
+                You have the right to request deletion of your data or to learn what data is being
+                processed. Please contact us through our support center at any time.
               </Text>
             </PolicySection>
           </View>
@@ -116,7 +116,7 @@ export default function PrivacyScreen() {
             onPress={() => router.back()}
             activeOpacity={0.85}
           >
-            <Text style={styles.understoodText}>Anladım</Text>
+            <Text style={styles.understoodText}>GOT IT</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -19,36 +19,112 @@ import { Colors } from '../constants/colors';
 import { SUBSCRIPTION_PLANS } from '../constants/templates';
 import { useCredits } from '../hooks/useCredits';
 import GradientButton from '../components/GradientButton';
+import {
+  getOfferings,
+  purchasePackage,
+  restorePurchases,
+  initRevenueCat,
+} from '../services/revenuecat';
+import type { PurchasesPackage } from 'react-native-purchases';
+import Constants from 'expo-constants';
 
 const { width, height } = Dimensions.get('window');
+const isExpoGo = Constants.appOwnership === 'expo';
 
 export default function UpgradeScreen() {
   const router = useRouter();
   const { credits, upgrade } = useCredits();
   const [loading, setLoading] = useState(false);
+  const [rcPackage, setRcPackage] = useState<PurchasesPackage | null>(null);
+  const [offeringsLoading, setOfferingsLoading] = useState(true);
   const plan = SUBSCRIPTION_PLANS[0];
 
+  useEffect(() => {
+    if (isExpoGo) {
+      setOfferingsLoading(false);
+      return;
+    }
+    // Ensure RC is initialized, then load offerings with retry
+    const loadOfferings = async () => {
+      await initRevenueCat();
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const offering = await getOfferings();
+        if (offering?.availablePackages?.length) {
+          setRcPackage(offering.availablePackages[0]);
+          break;
+        }
+        // Wait before retrying
+        if (attempt < 2) await new Promise((r) => setTimeout(r, 1500));
+      }
+      setOfferingsLoading(false);
+    };
+    loadOfferings();
+  }, []);
+
   const handleSubscribe = async () => {
+    if (isExpoGo) {
+      Alert.alert(
+        'Expo Go Not Supported',
+        'In-app purchases require a real device build. Use TestFlight or build with: npx expo run:ios',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    if (!rcPackage) {
+      Alert.alert(
+        'Store Not Ready',
+        'Could not load products from App Store. Please check your internet connection and try again.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Retry',
+            onPress: async () => {
+              const offering = await getOfferings();
+              if (offering?.availablePackages?.length) {
+                setRcPackage(offering.availablePackages[0]);
+              }
+            },
+          },
+        ]
+      );
+      return;
+    }
     setLoading(true);
     try {
-      // In production, integrate with expo-in-app-purchases or RevenueCat
-      // For now, simulate a successful purchase
-      await new Promise((r) => setTimeout(r, 1500));
-      await upgrade(plan.credits);
-      Alert.alert(
-        '🎉 Welcome to Diamond!',
-        `You now have ${plan.credits.toLocaleString()} credits to create amazing AI videos!`,
-        [{ text: 'Let\'s Go!', onPress: () => router.back() }]
-      );
-    } catch {
+      const { isPro } = await purchasePackage(rcPackage);
+      if (isPro) {
+        await upgrade(plan.credits);
+        Alert.alert(
+          '🎉 Welcome to Diamond!',
+          `You now have ${plan.credits.toLocaleString()} credits!`,
+          [{ text: "Let's Go!", onPress: () => router.back() }]
+        );
+      }
+    } catch (e: any) {
+      if (e?.userCancelled) return;
       Alert.alert('Purchase Failed', 'Could not complete purchase. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRestore = () => {
-    Alert.alert('Restore Purchases', 'No previous purchases found.');
+  const handleRestore = async () => {
+    setLoading(true);
+    try {
+      const { isPro } = await restorePurchases();
+      if (isPro) {
+        await upgrade(plan.credits);
+        Alert.alert('Restored!', 'Your purchase has been restored.', [
+          { text: 'OK', onPress: () => router.back() },
+        ]);
+      } else {
+        Alert.alert('No Purchases Found', 'No active subscription was found to restore.');
+      }
+    } catch {
+      Alert.alert('Restore Failed', 'Could not restore purchases. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -130,9 +206,11 @@ export default function UpgradeScreen() {
               </Text>
               <Text style={styles.creditsLabel}>credits</Text>
 
-              {/* Price */}
+              {/* Price — use App Store localized price when available */}
               <View style={styles.priceRow}>
-                <Text style={styles.price}>{plan.priceDisplay}</Text>
+                <Text style={styles.price}>
+                  {rcPackage?.product.priceString ?? plan.priceDisplay}
+                </Text>
                 <Text style={styles.pricePeriod}> / {plan.period}</Text>
               </View>
 
@@ -159,11 +237,27 @@ export default function UpgradeScreen() {
           </View>
         )}
 
+        {/* Expo Go warning */}
+        {isExpoGo && (
+          <View style={styles.expoGoNote}>
+            <Ionicons name="information-circle" size={16} color={Colors.warning} />
+            <Text style={styles.expoGoText}>
+              IAP only works in TestFlight / App Store builds
+            </Text>
+          </View>
+        )}
+
         {/* CTA button */}
         <GradientButton
-          title={plan.trialDays ? `Start ${plan.trialDays}-Day Free Trial` : 'Subscribe Now'}
+          title={
+            offeringsLoading
+              ? 'Loading...'
+              : plan.trialDays
+              ? `Start ${plan.trialDays}-Day Free Trial`
+              : 'Subscribe Now'
+          }
           onPress={handleSubscribe}
-          loading={loading}
+          loading={loading || offeringsLoading}
           colors={Colors.gradientUpgrade}
           style={styles.ctaBtn}
           leftIcon={<Ionicons name="diamond" size={18} color="#fff" />}
@@ -171,11 +265,11 @@ export default function UpgradeScreen() {
 
         {/* Legal links */}
         <View style={styles.legalRow}>
-          <TouchableOpacity onPress={() => Linking.openURL('https://bloomai.com/terms')}>
+          <TouchableOpacity onPress={() => Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
             <Text style={styles.legalLink}>Terms of Use</Text>
           </TouchableOpacity>
           <Text style={styles.legalSep}>|</Text>
-          <TouchableOpacity onPress={() => Linking.openURL('https://bloomai.com/privacy')}>
+          <TouchableOpacity onPress={() => Linking.openURL('https://mobilonn.com/privacy-policy.html')}>
             <Text style={styles.legalLink}>Privacy</Text>
           </TouchableOpacity>
           <Text style={styles.legalSep}>|</Text>
@@ -400,6 +494,24 @@ const styles = StyleSheet.create({
     color: Colors.warning,
     fontSize: 13,
     fontWeight: '600',
+  },
+  expoGoNote: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    marginBottom: 12,
+    backgroundColor: 'rgba(245,158,11,0.1)',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(245,158,11,0.25)',
+  },
+  expoGoText: {
+    color: Colors.warning,
+    fontSize: 12,
+    fontWeight: '600',
+    flex: 1,
   },
   ctaBtn: {
     width: '100%',

@@ -52,7 +52,7 @@ export default function AboutScreen() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} activeOpacity={0.75}>
             <Ionicons name="chevron-back" size={22} color="#fff" />
           </TouchableOpacity>
-          <Text style={styles.title}>Hakkımızda</Text>
+          <Text style={styles.title}>About Us</Text>
           <View style={{ width: 38 }} />
         </View>
 
@@ -71,15 +71,15 @@ export default function AboutScreen() {
           >
             <View style={styles.cardInner}>
               <Text style={styles.cardHeadline}>
-                Geleceğin video teknolojilerini herkes için erişilebilir kılıyoruz...
+                Making tomorrow's video technology accessible to everyone...
               </Text>
               <Text style={styles.cardBody}>
-                Yapay zeka gücüyle yaratıcılığınızı sınırlardan kurtarıyoruz. Cyberpunk
-                vizyonumuzla, karmaşık düzenleme süreçlerini tek bir dokunuşa indirgiyoruz.
+                We unleash your creativity with the power of artificial intelligence. With our
+                cyberpunk vision, we reduce complex editing processes to a single tap.
                 {'\n\n'}
-                Amacımız, her kullanıcının profesyonel kalitede içerikler üretebileceği, dijital
-                sanatın ve teknolojinin mükemmel uyumunu yakaladığı bir platform sunmak. Bizimle
-                birlikte video üretiminin geleceğini keşfedin.
+                Our mission is to provide a platform where every user can create professional-quality
+                content — the perfect harmony of digital art and technology. Discover the future of
+                video creation with us.
               </Text>
             </View>
           </LinearGradient>
@@ -94,9 +94,9 @@ export default function AboutScreen() {
             <TouchableOpacity
               style={styles.contactBtnTouchable}
               activeOpacity={0.85}
-              onPress={() => Linking.openURL('mailto:destek@bloomai.app').catch(() => {})}
+              onPress={() => Linking.openURL('mailto:support@bloomai.app').catch(() => {})}
             >
-              <Text style={styles.contactBtnText}>BİZE ULAŞIN</Text>
+              <Text style={styles.contactBtnText}>CONTACT US</Text>
             </TouchableOpacity>
           </LinearGradient>
         </ScrollView>

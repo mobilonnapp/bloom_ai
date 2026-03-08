@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.bloomai.maker",
+      "bundleIdentifier": "ai.imagevideomaker",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "We need access to your photos to select face images for AI video generation.",
         "NSCameraUsageDescription": "We need camera access to take face photos for video generation.",
@@ -38,6 +38,18 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "2115228315969603",
+          "clientToken": "87d449cc2409f19d0d71cc358b17523f",
+          "displayName": "Bloom AI Maker",
+          "scheme": "fb2115228315969603",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": true,
+          "isAutoInitEnabled": true
+        }
+      ],
       [
         "expo-image-picker",
         {

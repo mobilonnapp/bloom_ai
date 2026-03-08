@@ -27,10 +27,11 @@ export default function TemplateDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { credits } = useCredits();
+
   const template = getTemplateById(id);
 
   const videoRef = useRef<Video>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [selectedCharIdx, setSelectedCharIdx] = useState(0);
   // Mount video only while this screen is focused — ensures a clean native view lifecycle
   const [isScreenFocused, setIsScreenFocused] = useState(false);
@@ -58,17 +59,23 @@ export default function TemplateDetailScreen() {
   const hasLocalVideo = !!template.localVideo;
   const hasRemoteVideo = !!template.videoUrl;
   const hasAnyVideo = hasLocalVideo || hasRemoteVideo;
-  const videoSource = hasLocalVideo
-    ? template.localVideo!
-    : { uri: template.videoUrl };
+  // Prefer remote URL when available (more reliable streaming); fall back to local asset
+  const videoSource = hasRemoteVideo
+    ? { uri: template.videoUrl }
+    : template.localVideo!;
 
   const handleCreate = () => {
+    if (!canAfford) {
+      router.push('/upgrade');
+      return;
+    }
     router.push(`/upload/${template.id}`);
   };
 
   const toggleMute = async () => {
-    setIsMuted((m) => !m);
-    await videoRef.current?.setStatusAsync({ isMuted: !isMuted });
+    const next = !isMuted;
+    setIsMuted(next);
+    await videoRef.current?.setStatusAsync({ isMuted: next });
   };
 
   return (
@@ -83,6 +90,10 @@ export default function TemplateDetailScreen() {
           shouldPlay
           isLooping
           isMuted={isMuted}
+          onLoad={() => {
+            videoRef.current?.setStatusAsync({ shouldPlay: true, isLooping: true });
+          }}
+          onError={(e) => console.warn('[Video] error:', e)}
         />
       ) : (
         <Image
@@ -133,7 +144,7 @@ export default function TemplateDetailScreen() {
                 </BlurView>
               </TouchableOpacity>
             )}
-            <CreditBadge amount={template.credits} size="sm" />
+            <CreditBadge amount={credits.balance} size="sm" />
           </View>
         </View>
       </SafeAreaView>
@@ -194,21 +205,6 @@ export default function TemplateDetailScreen() {
           </View>
         )}
 
-        {/* Not enough credits */}
-        {!canAfford && (
-          <TouchableOpacity
-            onPress={() => router.push('/upgrade')}
-            style={styles.creditWarning}
-            activeOpacity={0.85}
-          >
-            <Ionicons name="warning" size={14} color={Colors.warning} />
-            <Text style={styles.creditWarningText}>
-              Yetersiz kredi.{' '}
-              <Text style={{ color: Colors.cyan, fontWeight: '700' }}>Yükselt →</Text>
-            </Text>
-          </TouchableOpacity>
-        )}
-
         {/* Duration & tags */}
         {(template.duration > 0 || (template.tags?.length ?? 0) > 0) && (
           <View style={styles.durationRow}>
@@ -230,7 +226,6 @@ export default function TemplateDetailScreen() {
         <GradientButton
           title="Create Video"
           onPress={handleCreate}
-          disabled={!canAfford}
           style={styles.ctaBtn}
           leftIcon={<Ionicons name="diamond" size={16} color="#fff" />}
           rightIcon={<Ionicons name="sparkles" size={16} color="#fff" />}

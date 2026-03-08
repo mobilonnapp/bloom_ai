@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors } from '../constants/colors';
 import SplashOverlay from '../components/SplashOverlay';
 import TutorialOverlay from '../components/TutorialOverlay';
+import { initFacebook } from '../services/facebook';
+import { initRevenueCat } from '../services/revenuecat';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,6 +21,10 @@ export default function RootLayout() {
   useEffect(() => {
     // Hide the native splash immediately — our custom overlay takes over
     SplashScreen.hideAsync();
+    // Initialize Meta (Facebook) SDK
+    initFacebook().catch(() => {});
+    // Initialize RevenueCat
+    initRevenueCat().catch(() => {});
   }, []);
 
   // After splash ends: check if this is first launch

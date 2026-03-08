@@ -140,12 +140,12 @@ export default function SettingsScreen() {
             />
             <Divider />
             <SettingsRow
-              label="Destek Merkezi"
+              label="Support Center"
               onPress={() =>
                 Alert.alert(
-                  'Destek Merkezi',
-                  'Destek için destek@bloomai.app adresine yazabilirsiniz.',
-                  [{ text: 'Tamam' }]
+                  'Support Center',
+                  'For support, please contact us at support@bloomai.app',
+                  [{ text: 'OK' }]
                 )
               }
             />
@@ -179,7 +179,7 @@ export default function SettingsScreen() {
           <SectionHeader title="Support" />
           <SettingsGroup>
             <SettingsRow
-              label="Hakkımızda"
+              label="About Us"
               onPress={() => router.push('/about')}
             />
             <Divider />
@@ -198,10 +198,10 @@ export default function SettingsScreen() {
           <View style={styles.footer}>
             <TouchableOpacity
               onPress={() =>
-                Alert.alert('Çıkış Yap', 'Çıkış yapmak istediğinizden emin misiniz?', [
-                  { text: 'İptal', style: 'cancel' },
+                Alert.alert('Log Out', 'Are you sure you want to log out?', [
+                  { text: 'Cancel', style: 'cancel' },
                   {
-                    text: 'Çıkış Yap',
+                    text: 'Log Out',
                     style: 'destructive',
                     onPress: () => router.replace('/(tabs)' as never),
                   },

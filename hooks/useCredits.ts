@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { UserCredits } from '../types';
 import { getCredits, setCredits, deductCredits, addCredits } from '../services/storage';
+import { checkProStatus } from '../services/revenuecat';
+import { SUBSCRIPTION_PLANS } from '../constants/templates';
+
+const PRO_CREDITS = SUBSCRIPTION_PLANS[0]?.credits ?? 3000;
 
 export function useCredits() {
   const [credits, setCreditsState] = useState<UserCredits>({ balance: 0, plan: 'free' });
@@ -9,7 +13,23 @@ export function useCredits() {
   const refresh = useCallback(async () => {
     setLoading(true);
     const data = await getCredits();
-    setCreditsState(data);
+
+    // RevenueCat aktif abonelik kontrolü — her uygulama açılışında senkronize et
+    const isPro = await checkProStatus();
+    if (isPro && data.plan !== 'pro') {
+      // Abonelik aktif ama local state free — pro'ya yükselt
+      const proCredits: UserCredits = { balance: PRO_CREDITS, plan: 'pro' };
+      await setCredits(proCredits);
+      setCreditsState(proCredits);
+    } else if (!isPro && data.plan === 'pro') {
+      // Abonelik sona ermiş — free'ye düşür
+      const freeCredits: UserCredits = { balance: 0, plan: 'free' };
+      await setCredits(freeCredits);
+      setCreditsState(freeCredits);
+    } else {
+      setCreditsState(data);
+    }
+
     setLoading(false);
   }, []);
 
