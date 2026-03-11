@@ -20,29 +20,29 @@ const PAGES = [
     icon: 'sparkles' as const,
     gradient: ['#8B5CF6', '#EC4899'] as [string, string],
     accent: '#8B5CF6',
-    title: "Bloom'a\nHoş Geldin!",
-    desc: 'Yapay zeka gücüyle kendi yüzünü şablon videolara yerleştir. Eğlenceli, kolay, büyüleyici.',
+    title: "Welcome to\nBloom!",
+    desc: 'Put your face into template videos using the power of AI. Fun, easy, and magical.',
   },
   {
     icon: 'film' as const,
     gradient: ['#00D4FF', '#0055CC'] as [string, string],
     accent: '#00D4FF',
-    title: 'Şablonunu\nSeç',
-    desc: 'Dans, bebek sahneleri, film klipleri… Onlarca hazır şablon arasından favorini bul.',
+    title: 'Pick Your\nTemplate',
+    desc: 'Dance clips, baby scenes, movie moments… Browse dozens of ready-made templates and find your favorite.',
   },
   {
     icon: 'camera' as const,
     gradient: ['#EC4899', '#8B5CF6'] as [string, string],
     accent: '#EC4899',
-    title: 'Fotoğrafını\nEkle',
-    desc: 'Net bir selfie yükle. Yapay zeka yüzünü şablona kusursuzca yerleştirsin.',
+    title: 'Add Your\nPhoto',
+    desc: 'Upload a clear selfie. Our AI will seamlessly place your face into the template.',
   },
   {
     icon: 'diamond' as const,
     gradient: ['#00D4FF', '#8B5CF6'] as [string, string],
     accent: '#00D4FF',
-    title: 'Hadi\nBaşlayalım!',
-    desc: '0 elmas ile başlıyorsun. Daha fazla video üretmek için istediğin zaman paket alabilirsin.',
+    title: "Let's\nGet Started!",
+    desc: 'You start with 0 credits. Upgrade anytime to create more amazing AI videos.',
   },
 ];
 
@@ -176,7 +176,7 @@ export default function TutorialOverlay({ onDone }: { onDone: () => void }) {
       {/* ── Skip button ── */}
       {!isLast && (
         <TouchableOpacity style={styles.skipBtn} onPress={finish} activeOpacity={0.7}>
-          <Text style={styles.skipText}>Atla</Text>
+          <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
       )}
 
@@ -246,7 +246,7 @@ export default function TutorialOverlay({ onDone }: { onDone: () => void }) {
             style={styles.btn}
           >
             <Text style={styles.btnText}>
-              {isLast ? 'Başlayalım!' : 'Devam Et'}
+              {isLast ? "Let's Go!" : 'Continue'}
             </Text>
             <Ionicons
               name={isLast ? 'rocket' : 'arrow-forward'}

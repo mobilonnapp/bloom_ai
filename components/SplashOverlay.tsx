@@ -77,12 +77,13 @@ const PARTICLES: ParticleProps[] = [
   { left: '14%', delay: 1600, size: 13 },
 ];
 
-export default function SplashOverlay({ onDone }: { onDone: () => void }) {
+export default function SplashOverlay({ onDone, ready }: { onDone: () => void; ready: boolean }) {
   const containerOpacity = useRef(new Animated.Value(1)).current;
   const logoScale        = useRef(new Animated.Value(0.5)).current;
   const logoOpacity      = useRef(new Animated.Value(0)).current;
   const textOpacity      = useRef(new Animated.Value(0)).current;
   const spinAnim         = useRef(new Animated.Value(0)).current;
+  const fadingOut        = useRef(false);
 
   useEffect(() => {
     // Continuously spin the gradient ring
@@ -117,19 +118,19 @@ export default function SplashOverlay({ onDone }: { onDone: () => void }) {
       delay: 350,
       useNativeDriver: true,
     }).start();
-
-    // Fade out the whole overlay after 2.2s, then notify parent
-    const t = setTimeout(() => {
-      Animated.timing(containerOpacity, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.ease,
-        useNativeDriver: true,
-      }).start(() => onDone());
-    }, 2200);
-
-    return () => clearTimeout(t);
   }, []);
+
+  // Fade out when parent signals ready
+  useEffect(() => {
+    if (!ready || fadingOut.current) return;
+    fadingOut.current = true;
+    Animated.timing(containerOpacity, {
+      toValue: 0,
+      duration: 500,
+      easing: Easing.ease,
+      useNativeDriver: true,
+    }).start(() => onDone());
+  }, [ready]);
 
   const spin = spinAnim.interpolate({
     inputRange:  [0, 1],

@@ -55,8 +55,6 @@ export async function getOfferings() {
   if (!Purchases || isExpoGo) return null;
   try {
     const offerings = await Purchases.getOfferings();
-    console.log('[RC] offerings.current:', offerings.current?.identifier ?? 'null');
-    console.log('[RC] all offerings keys:', Object.keys(offerings.all ?? {}));
     return offerings.current ?? null;
   } catch (e) {
     console.warn('[RC] getOfferings error:', e);

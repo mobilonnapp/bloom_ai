@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Image } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -9,6 +10,7 @@ import SplashOverlay from '../components/SplashOverlay';
 import TutorialOverlay from '../components/TutorialOverlay';
 import { initFacebook } from '../services/facebook';
 import { initRevenueCat } from '../services/revenuecat';
+import { MOCK_TEMPLATES } from '../constants/templates';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,6 +19,7 @@ const TUTORIAL_KEY = '@bloom:tutorial_seen';
 export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(true);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [splashReady, setSplashReady] = useState(false);
 
   useEffect(() => {
     // Hide the native splash immediately — our custom overlay takes over
@@ -25,6 +28,16 @@ export default function RootLayout() {
     initFacebook().catch(() => {});
     // Initialize RevenueCat
     initRevenueCat().catch(() => {});
+
+    // Prefetch all thumbnails; show homepage only when done (min 2s)
+    const prefetchAll = Promise.all(
+      MOCK_TEMPLATES.map((t) =>
+        t.thumbnailUrl ? Image.prefetch(t.thumbnailUrl).catch(() => {}) : Promise.resolve()
+      )
+    );
+    const minDelay = new Promise<void>((resolve) => setTimeout(resolve, 2000));
+
+    Promise.all([prefetchAll, minDelay]).then(() => setSplashReady(true));
   }, []);
 
   // After splash ends: check if this is first launch
@@ -72,7 +85,7 @@ export default function RootLayout() {
 
       {/* Tutorial renders under splash so it's revealed when splash fades out */}
       {showTutorial && <TutorialOverlay onDone={handleTutorialDone} />}
-      {showSplash && <SplashOverlay onDone={handleSplashDone} />}
+      {showSplash && <SplashOverlay onDone={handleSplashDone} ready={splashReady} />}
     </GestureHandlerRootView>
   );
 }

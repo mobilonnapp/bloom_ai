@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -46,12 +46,13 @@ export default function HomeScreen() {
     router.push(`/template/${template.id}`);
   };
 
-  const templatesByCategory = TEMPLATE_CATEGORIES.reduce<Record<string, Template[]>>(
-    (acc, cat) => {
-      acc[cat] = MOCK_TEMPLATES.filter((t) => t.category === cat);
-      return acc;
-    },
-    {}
+  const templatesByCategory = useMemo(
+    () =>
+      TEMPLATE_CATEGORIES.reduce<Record<string, Template[]>>((acc, cat) => {
+        acc[cat] = MOCK_TEMPLATES.filter((t) => t.category === cat);
+        return acc;
+      }, {}),
+    []
   );
 
   return (

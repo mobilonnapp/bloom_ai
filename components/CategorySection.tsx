@@ -39,7 +39,10 @@ export default function CategorySection({
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.list}
-        removeClippedSubviews={false}
+        removeClippedSubviews={true}
+        initialNumToRender={4}
+        maxToRenderPerBatch={4}
+        windowSize={5}
       />
     </View>
   );
