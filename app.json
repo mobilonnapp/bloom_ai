@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "bloom",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -25,12 +25,6 @@
         "NSCameraUsageDescription": "We need camera access to take face photos for video generation.",
         "NSPhotoLibraryAddUsageDescription": "We need permission to save your AI-generated videos to your gallery.",
         "SKAdNetworkItems": [
-          {
-            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
-          },
-          {
-            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
-          },
           {
             "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
           },
