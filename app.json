@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "bloom",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -57,18 +57,6 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "react-native-fbsdk-next",
-        {
-          "appID": "2115228315969603",
-          "clientToken": "87d449cc2409f19d0d71cc358b17523f",
-          "displayName": "Bloom AI Maker",
-          "scheme": "fb2115228315969603",
-          "advertiserIDCollectionEnabled": false,
-          "autoLogAppEventsEnabled": true,
-          "isAutoInitEnabled": true
-        }
-      ],
       [
         "expo-image-picker",
         {
