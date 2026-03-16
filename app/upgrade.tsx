@@ -232,7 +232,7 @@ export default function UpgradeScreen() {
           <View style={styles.trialNote}>
             <Ionicons name="gift" size={16} color={Colors.warning} />
             <Text style={styles.trialText}>
-              {plan.trialDays}-day free trial • Cancel anytime
+              After your {plan.trialDays}-day free trial, you will be charged $7.99 per week unless canceled.
             </Text>
           </View>
         )}
