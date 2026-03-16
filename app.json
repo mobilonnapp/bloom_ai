@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bloom AI Maker",
     "slug": "bloom-ai-maker",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "bloom",
@@ -72,7 +72,15 @@
           "isAccessMediaLocationEnabled": true
         }
       ],
-      "expo-av"
+      "expo-av",
+      [
+        "@react-native-firebase/app",
+        {
+          "ios": {
+            "googleServicesFile": "./GoogleService-Info.plist"
+          }
+        }
+      ],
     ],
     "experiments": {
       "typedRoutes": true

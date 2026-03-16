@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Easing,
+  Linking,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -50,6 +51,7 @@ const PAGES = [
 
 export default function TutorialOverlay({ onDone }: { onDone: () => void }) {
   const [page, setPage] = useState(0);
+  const [consentChecked, setConsentChecked] = useState(false);
   const isLast = page === PAGES.length - 1;
   const current = PAGES[page];
 
@@ -233,11 +235,34 @@ export default function TutorialOverlay({ onDone }: { onDone: () => void }) {
           ))}
         </View>
 
+        {/* Consent checkbox — last page only */}
+        {isLast && (
+          <TouchableOpacity
+            style={styles.consentRow}
+            onPress={() => setConsentChecked(v => !v)}
+            activeOpacity={0.7}
+          >
+            <View style={[styles.checkbox, consentChecked && styles.checkboxChecked]}>
+              {consentChecked && <Ionicons name="checkmark" size={12} color="#fff" />}
+            </View>
+            <Text style={styles.consentText}>
+              I agree to share my photos with third-party AI providers to process my request. I have read the{' '}
+              <Text
+                style={styles.consentLink}
+                onPress={() => Linking.openURL('https://mobilonn.com/privacy-policy.html')}
+              >
+                Privacy Policy
+              </Text>
+            </Text>
+          </TouchableOpacity>
+        )}
+
         {/* CTA button */}
         <TouchableOpacity
           onPress={isLast ? finish : goNext}
           activeOpacity={0.85}
-          style={styles.btnWrapper}
+          style={[styles.btnWrapper, isLast && !consentChecked && styles.btnDisabled]}
+          disabled={isLast && !consentChecked}
         >
           <LinearGradient
             colors={current.gradient}
@@ -385,10 +410,44 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
+  consentRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    paddingHorizontal: 4,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+    flexShrink: 0,
+  },
+  checkboxChecked: {
+    backgroundColor: '#8B5CF6',
+    borderColor: '#8B5CF6',
+  },
+  consentText: {
+    flex: 1,
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: 11,
+    lineHeight: 16,
+  },
+  consentLink: {
+    color: '#00D4FF',
+    textDecorationLine: 'underline',
+  },
   btnWrapper: {
     width: '100%',
     borderRadius: 16,
     overflow: 'hidden',
+  },
+  btnDisabled: {
+    opacity: 0.4,
   },
   btn: {
     flexDirection: 'row',
