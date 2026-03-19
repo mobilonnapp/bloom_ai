@@ -20,6 +20,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "ai.imagevideomaker",
       "buildNumber": "1",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "We need access to your photos to select face images for AI video generation.",
         "NSCameraUsageDescription": "We need camera access to take face photos for video generation.",
@@ -73,14 +74,7 @@
         }
       ],
       "expo-av",
-      [
-        "@react-native-firebase/app",
-        {
-          "ios": {
-            "googleServicesFile": "./GoogleService-Info.plist"
-          }
-        }
-      ],
+      "@react-native-firebase/app",
     ],
     "experiments": {
       "typedRoutes": true

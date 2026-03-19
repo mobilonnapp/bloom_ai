@@ -28,6 +28,5 @@ npm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
-# Firebase
-GoogleService-Info.plist
-google-services.json
+# Firebase (committed intentionally — client-side config, restricted by bundle ID)
+# google-services.json
