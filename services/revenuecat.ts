@@ -8,14 +8,14 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
 // Expo Go'da native IAP çalışmaz — atla
-const isExpoGo = Constants.appOwnership === 'expo';
+const isExpoGo = Constants.executionEnvironment === 'storeClient';
 
 // RevenueCat API Keys — RevenueCat dashboard'dan alın
 const RC_IOS_KEY = 'appl_RclycLWlwtrCQiFXjejBeXRfEjV';
 const RC_ANDROID_KEY = 'goog_BURAYA_ANDROID_KEY';
 
 // Entitlement identifier — RevenueCat dashboard'da tanımladığınız isim
-export const ENTITLEMENT_PRO = 'pro';
+export const ENTITLEMENT_PRO = 'bloom_pro_weekly';
 
 let Purchases: typeof import('react-native-purchases').default | null = null;
 
@@ -31,7 +31,7 @@ export async function initRevenueCat() {
   if (!Purchases || isExpoGo) return;
   try {
     const apiKey = Platform.OS === 'ios' ? RC_IOS_KEY : RC_ANDROID_KEY;
-    await Purchases.configure({ apiKey });
+    Purchases.configure({ apiKey });
   } catch (e) {
     console.warn('[RevenueCat] init error:', e);
   }

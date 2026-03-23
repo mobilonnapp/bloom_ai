@@ -84,6 +84,14 @@ export default function AboutScreen() {
             </View>
           </LinearGradient>
 
+          {/* Disclaimer card */}
+          <View style={styles.disclaimerCard}>
+            <Ionicons name="information-circle-outline" size={20} color={CYAN} style={{ marginBottom: 6 }} />
+            <Text style={styles.disclaimerText}>
+              Bloom AI Maker is intended for <Text style={{ color: '#fff', fontWeight: '700' }}>entertainment purposes only</Text>. Please do not upload images or videos that contain copyrighted material, including photos or footage belonging to third parties. You are solely responsible for the content you submit. By using this app, you agree to our Terms of Service and Privacy Policy.
+            </Text>
+          </View>
+
           {/* Contact button */}
           <LinearGradient
             colors={[PINK, CYAN]}
@@ -224,6 +232,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,212,255,0.06)',
+  },
+  disclaimerCard: {
+    width: '100%',
+    backgroundColor: 'rgba(0,212,255,0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,212,255,0.2)',
+    borderRadius: 16,
+    padding: 16,
+    alignItems: 'center',
+  },
+  disclaimerText: {
+    color: 'rgba(255,255,255,0.65)',
+    fontSize: 13,
+    lineHeight: 20,
+    textAlign: 'center',
   },
   contactBtn: {
     width: '100%',

@@ -259,18 +259,6 @@ export const MOCK_TEMPLATES: Template[] = [
     isTrending: true,
   },
   {
-    id: 'vd-2',
-    title: 'Trump',
-    category: 'Viral Dance',
-    thumbnailUrl: 'https://res.cloudinary.com/dpg9ld8n8/video/upload/so_0/indir_tpo8j2.jpg',
-    videoUrl: 'https://res.cloudinary.com/dpg9ld8n8/video/upload/v1772925740/indir_tpo8j2.mp4',
-    duration: 0,
-    credits: 500,
-    hasSound: true,
-    characterCount: 1,
-    isTrending: true,
-  },
-  {
     id: 'vd-3',
     title: 'Happy Chinese',
     category: 'Viral Dance',
@@ -501,18 +489,6 @@ export const MOCK_TEMPLATES: Template[] = [
     isPopular: true,
   },
   {
-    id: 'pn-2',
-    title: 'Man in Blazer',
-    category: 'Popular Now',
-    thumbnailUrl: 'https://res.cloudinary.com/dpg9ld8n8/video/upload/so_0/v1773260287/Man_In_Blazer_Standing_By_Pool_With_Autumn_Trees_In_Background_AI_Video_tq438k.jpg',
-    videoUrl: 'https://res.cloudinary.com/dpg9ld8n8/video/upload/v1773260287/Man_In_Blazer_Standing_By_Pool_With_Autumn_Trees_In_Background_AI_Video_tq438k.mp4',
-    duration: 15,
-    credits: 500,
-    hasSound: true,
-    characterCount: 1,
-    isPopular: true,
-  },
-  {
     id: 'pn-3',
     title: 'The Money',
     category: 'Popular Now',
@@ -610,18 +586,6 @@ export const MOCK_TEMPLATES: Template[] = [
   },
 
   // ─── All Eyes On You ────────────────────────────────────────────────────────
-  {
-    id: 'ae-1',
-    title: 'Woman Gracefully',
-    category: 'All Eyes On You',
-    thumbnailUrl: 'https://res.cloudinary.com/dpg9ld8n8/video/upload/so_0/v1773260748/Woman_Gracefully_Rises_From_Chair_Walks_Away_With_Smooth_Natural_Movements_AI_Video_udcnzj.jpg',
-    videoUrl: 'https://res.cloudinary.com/dpg9ld8n8/video/upload/v1773260748/Woman_Gracefully_Rises_From_Chair_Walks_Away_With_Smooth_Natural_Movements_AI_Video_udcnzj.mp4',
-    duration: 15,
-    credits: 500,
-    hasSound: true,
-    characterCount: 1,
-    isPopular: true,
-  },
   {
     id: 'ae-2',
     title: 'Blonde Woman',
@@ -810,7 +774,7 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     name: 'Diamond Unlimited',
     credits: 3000,
     priceDisplay: '₺449,99',
-    period: 'Hafta',
+    period: 'week',
     trialDays: 3,
     features: [
       'Unlimited AI video generation',

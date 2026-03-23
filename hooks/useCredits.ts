@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { UserCredits } from '../types';
 import { getCredits, setCredits, deductCredits, addCredits } from '../services/storage';
-import { checkProStatus } from '../services/revenuecat';
+import { initRevenueCat, checkProStatus } from '../services/revenuecat';
 import { SUBSCRIPTION_PLANS } from '../constants/templates';
 
 const PRO_CREDITS = SUBSCRIPTION_PLANS[0]?.credits ?? 3000;
@@ -14,15 +14,17 @@ export function useCredits() {
     setLoading(true);
     const data = await getCredits();
 
-    // RevenueCat aktif abonelik kontrolü — her uygulama açılışında senkronize et
+    // Ensure RC is initialized before checking status
+    await initRevenueCat();
     const isPro = await checkProStatus();
+
     if (isPro && data.plan !== 'pro') {
-      // Abonelik aktif ama local state free — pro'ya yükselt
+      // Active subscription but local state is free — restore pro
       const proCredits: UserCredits = { balance: PRO_CREDITS, plan: 'pro' };
       await setCredits(proCredits);
       setCreditsState(proCredits);
     } else if (!isPro && data.plan === 'pro') {
-      // Abonelik sona ermiş — free'ye düşür
+      // Subscription expired — downgrade to free
       const freeCredits: UserCredits = { balance: 0, plan: 'free' };
       await setCredits(freeCredits);
       setCreditsState(freeCredits);

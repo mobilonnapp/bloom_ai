@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getAnalytics, logEvent, setCurrentScreen, isSupported } from 'firebase/analytics';
+import { getAnalytics, logEvent, isSupported } from 'firebase/analytics';
 import type { Analytics } from 'firebase/analytics';
 
 const firebaseConfig = {
@@ -7,7 +7,7 @@ const firebaseConfig = {
   projectId: 'bloom-ai-maker',
   storageBucket: 'bloom-ai-maker.firebasestorage.app',
   messagingSenderId: '558792021407',
-  appId: '1:558792021407:ios:placeholder', // update with real appId from Firebase console
+  appId: '1:558792021407:ios:ba10d757bbdb71c214d9aa',
 };
 
 let analyticsInstance: Analytics | null = null;
@@ -32,8 +32,7 @@ export async function logScreenView(screenName: string) {
   try {
     const a = await getAnalyticsInstance();
     if (!a) return;
-    await setCurrentScreen(a, screenName);
-    logEvent(a, 'screen_view', { screen_name: screenName, screen_class: screenName });
+    logEvent(a, 'screen_view', { firebase_screen: screenName, firebase_screen_class: screenName });
   } catch {}
 }
 

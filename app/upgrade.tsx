@@ -29,7 +29,7 @@ import type { PurchasesPackage } from 'react-native-purchases';
 import Constants from 'expo-constants';
 
 const { width, height } = Dimensions.get('window');
-const isExpoGo = Constants.appOwnership === 'expo';
+const isExpoGo = Constants.executionEnvironment === 'storeClient';
 
 export default function UpgradeScreen() {
   const router = useRouter();
@@ -91,11 +91,28 @@ export default function UpgradeScreen() {
     }
     setLoading(true);
     try {
-      const { isPro } = await purchasePackage(rcPackage);
-      if (isPro) {
+      const { customerInfo, isPro } = await purchasePackage(rcPackage);
+      // Grant credits if entitlement is active OR if any active subscription exists.
+      // purchasePackage only resolves (without throwing) when payment is confirmed by Apple —
+      // so a successful resolution always means the user paid.
+      const hasActiveSubscription =
+        isPro ||
+        (customerInfo?.activeSubscriptions?.length ?? 0) > 0 ||
+        Object.keys(customerInfo?.entitlements?.active ?? {}).length > 0;
+
+      if (hasActiveSubscription) {
         await upgrade(plan.credits);
         Alert.alert(
           '🎉 Welcome to Diamond!',
+          `You now have ${plan.credits.toLocaleString()} credits!`,
+          [{ text: "Let's Go!", onPress: () => router.back() }]
+        );
+      } else {
+        // Purchase resolved but entitlement not active yet — grant credits anyway
+        // since Apple confirmed the transaction
+        await upgrade(plan.credits);
+        Alert.alert(
+          '🎉 Purchase Successful!',
           `You now have ${plan.credits.toLocaleString()} credits!`,
           [{ text: "Let's Go!", onPress: () => router.back() }]
         );
@@ -205,6 +222,7 @@ export default function UpgradeScreen() {
                 {plan.credits.toLocaleString()}
               </Text>
               <Text style={styles.creditsLabel}>credits</Text>
+              <Text style={styles.subscriptionLabel}>Weekly Subscription</Text>
 
               {/* Price — use App Store localized price when available */}
               <View style={styles.priceRow}>
@@ -279,8 +297,7 @@ export default function UpgradeScreen() {
         </View>
 
         <Text style={styles.disclaimer}>
-          Subscription automatically renews unless cancelled at least 24 hours before the end of the
-          current period. Payment will be charged to your account upon purchase confirmation.
+          Subscription auto-renews weekly unless cancelled at least 24 hours before the end of the current period. You can cancel anytime in your App Store settings. Payment will be charged to your Apple ID account upon purchase confirmation.
         </Text>
 
         <View style={{ height: 40 }} />
@@ -446,7 +463,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginTop: -4,
+    marginBottom: 4,
+  },
+  subscriptionLabel: {
+    color: Colors.cyan,
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
     marginBottom: 8,
+    opacity: 0.9,
   },
   priceRow: {
     flexDirection: 'row',
