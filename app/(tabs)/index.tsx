@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -22,18 +22,6 @@ export default function HomeScreen() {
   const { credits } = useCredits();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [isScreenFocused, setIsScreenFocused] = useState(true);
-  const promoFiredRef = useRef(false);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (promoFiredRef.current) return;
-      promoFiredRef.current = true;
-      const timer = setTimeout(() => {
-        router.push('/upgrade');
-      }, 1500);
-      return () => clearTimeout(timer);
-    }, [])
-  );
 
   useFocusEffect(
     useCallback(() => {

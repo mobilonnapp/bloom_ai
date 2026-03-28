@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
@@ -50,6 +50,8 @@ export default function RootLayout() {
   const handleTutorialDone = async () => {
     await AsyncStorage.setItem(TUTORIAL_KEY, '1');
     setShowTutorial(false);
+    // Show PRO upgrade screen before user reaches the dashboard
+    router.push('/upgrade');
   };
 
   return (

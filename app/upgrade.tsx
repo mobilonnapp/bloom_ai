@@ -281,6 +281,11 @@ export default function UpgradeScreen() {
           leftIcon={<Ionicons name="diamond" size={18} color="#fff" />}
         />
 
+        {/* Trial summary */}
+        <Text style={styles.trialSummary}>
+          3 days free, then $7.99 per week. Cancel anytime.
+        </Text>
+
         {/* Legal links */}
         <View style={styles.legalRow}>
           <TouchableOpacity onPress={() => Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
@@ -557,6 +562,14 @@ const styles = StyleSheet.create({
   legalSep: {
     color: Colors.textMuted,
     fontSize: 12,
+  },
+  trialSummary: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 12,
+    marginBottom: 4,
   },
   disclaimer: {
     color: Colors.textMuted,

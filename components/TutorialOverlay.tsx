@@ -246,13 +246,14 @@ export default function TutorialOverlay({ onDone }: { onDone: () => void }) {
               {consentChecked && <Ionicons name="checkmark" size={12} color="#fff" />}
             </View>
             <Text style={styles.consentText}>
-              I agree to share my photos with third-party AI providers to process my request. I have read the{' '}
+              I agree to share the photos I upload with Vmodel.Ai for the sole purpose of generating AI videos. I understand that my data is processed according to the{' '}
               <Text
                 style={styles.consentLink}
                 onPress={() => Linking.openURL('https://mobilonn.com/privacy-policy.html')}
               >
                 Privacy Policy
               </Text>
+              .
             </Text>
           </TouchableOpacity>
         )}
